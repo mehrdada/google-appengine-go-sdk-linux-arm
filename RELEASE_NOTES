@@ -1,0 +1,283 @@
+App Engine Go SDK - Release Notes
+
+Changes that are not backward compatible
+are marked with an exclamation mark ("!").
+
+Version 1.7.7 - April 2013
+==========================
+appengine/file:
+  - Add Delete function.
+appengine/log:
+  - Expose AppEngineRelease.
+
+Version 1.7.6 - March 2013
+==========================
+appengine/datastore:
+  - Support nested and embedded structs.
+dev_appserver:
+  - Update to version 2. Amongst other things, it can now serve concurrent HTTP
+    requests.
+
+Version 1.7.5 - February 2013
+=============================
+appengine:
+  - Add Namespace function for multitenancy support.
+  ! Make Context's Call method take appengine_internal.ProtoMessage arguments.
+    This is an internal-only method, so should not affect correct applications,
+    but will permit wrapping Context's Call method.
+appengine/conversion:
+  ! Remove this package from the SDK following the decommissioning of the API
+    in 1.7.4.
+appengine/datastore:
+  - Support multitenancy.
+appengine/memcache:
+  - Support multitenancy.
+appengine/taskqueue:
+  - Add DeleteMulti function.
+  - Support multitenancy.
+appengine/xmpp:
+  - Add GetPresenceMulti function.
+
+Version 1.7.4 - December 2012
+=============================
+appengine/log:
+  - Add Query.RequestIDs field.
+appengine/socket:
+  - Support dialing IPv6 addresses.
+  - Implement LocalAddr and RemoteAddr methods.
+Other:
+  - Respect $GOPATH for dev_appserver and appcfg update.
+
+Version 1.7.3 - October 2012
+============================
+appengine:
+  - Add AccessToken, ServiceAccount and SignBytes functions.
+appengine/log:
+  ! Remove the deprecated Record.APIMCycles field.
+appengine/memcache:
+  - Add Flush function.
+appengine/socket:
+  - New package.
+
+Version 1.7.2 - September 2012
+==============================
+No changes.
+
+Version 1.7.1 - August 2012
+===========================
+appengine:
+  - Add RequestID function.
+  ! Make Context's Call method take proto.Message arguments.
+    This is an internal-only method, so should not affect correct applications.
+appengine/datastore:
+  - Mark noindex string fields as Text so that the Datastore Viewer can
+    display them.
+  - Make GetAll not return early when encountering ErrFieldMismatch.
+appengine/image:
+  - New package.
+appengine/log:
+  - Deprecate Record.APIMCycles.
+appengine/memcache:
+  - Add Codec methods SetMulti, AddMulti, CompareAndSwap, CompareAndSwapMulti.
+appengine/remote_api:
+  - New package.
+appengine/runtime:
+  - Add RunInBackground function.
+appengine/user:
+  - Add OAuth user support.
+  - Add Admin to User struct.
+appengine/xmpp:
+  - Add RawXML support.
+  - Add presence support.
+
+Version 1.7.0 - June 2012
+=========================
+appengine/datastore:
+  - Allow storage of time.Time values from before January 1, 1970, including
+    the zero time.Time value.
+appengine/delay:
+  - Fix handling of nil arguments.
+appengine/file:
+  - New package for Google Cloud Storage.
+appengine/taskqueue:
+  - Add QueueStats function.
+
+Version 1.6.6 - May 2012
+========================
+appengine/delay:
+  - Add Task method for finer control over execution.
+appengine/mail:
+  - Add support for setting mail headers.
+appengine/taskqueue:
+  - Observe Task.ETA field when adding a task to a push queue.
+  - Enforce that a Task's Delay and ETA fields are mutually exclusive.
+
+Version 1.6.5 - April 2012
+==========================
+No changes.
+
+Version 1.6.4 - March 2012
+==========================
+This release is based on Go 1.
+
+appengine:
+  ! Remove the AppID method on Context.
+  - Add MultiError type.
+  - Add InstanceID, Datacenter and ServerSoftware functions.
+appengine/datastore:
+  - Add cursors.
+  - Add AllocateIDs function.
+  - Allow (*datastore.Key)(nil) as a storable value.
+  - Allow GetMulti, PutMulti and GetAll to take PropertyLoadSavers, not just
+    structs. Their slice argument can now be a []T, not just a []interface{}.
+  - Allow Iterator.Next to take a nil destination for all queries, not just
+    keys-only queries.
+  ! Make queries immutable. Query methods like Filter and Order return a new
+    value instead of modifying the receiver. Use an assignment such as
+    "q = q.Offset(1)" instead of a bare statement like "q.Offset(1)".
+  ! Change the meaning of Query.Limit(0) from "unlimited" to "no results" and
+    change the meaning of Query.Limit(-1) from being an error to "unlimited".
+    Unlimited is still the default behavior.
+  ! Remove datastore.Time in favour of time.Time.
+  ! Remove the deprecated Map type. Use a PropertyList instead.
+  ! Rename Eq method of Key to Equal.
+appengine/log:
+  ! Convert to using time.Duration and time.Time throughout.
+appengine/mail:
+  - Support HTML mail.
+appengine/memcache:
+  ! Change Item.Expiration's type from int32 seconds to time.Duration.
+    (Code may still compile, but will likely be wrong, expiring
+     items immediately, interpreting seconds as nanoseconds)
+  ! Make functions uniformly return error, using appengine.MultiError
+    for batch operations.
+appengine/taskqueue:
+  ! Rename LeaseTasks, LeaseTasksByTag and ModifyTaskLease to
+    Lease, LeaseByTag and ModifyLease respectively.
+  ! Convert to using time.Duration and time.Time throughout.
+appengine/urlfetch:
+  ! Change Transport.DeadlineSeconds's type from float64 to time.Duration,
+    and rename it to Deadline.
+appengine/user:
+  ! Rename Id field of User struct to ID.
+appengine/xmpp
+  ! Remove ChatHandler, and rename RegisterChatHandler to Handle.
+  ! Remove SendMessageError. Use appengine.MultiError instead.
+
+Version 1.6.3 - February 2012
+=============================
+No changes.
+
+Version 1.6.2 - January 2012
+============================
+appengine/taskqueue:
+  - Add AddMulti function for bulk task adding.
+
+Version 1.6.1 - December 2011
+=============================
+appengine/conversion:
+  - New package.
+appengine/delay:
+  - Fix calling delayed variadic functions.
+Other:
+  - Explicitly break http.DefaultClient to make dev and prod consistent.
+
+Version 1.6.0 - November 2011
+=============================
+This release is based on Go release.r60.3.
+
+appengine:
+  - Add backend identity functions: BackendInstance, BackendHostname.
+appengine/blobstore:
+  ! Make ParseURL return url.Values instead of map[string][]string.
+appengine/datastore:
+  - Add `datastore:"name,options"` struct field tags.
+  - Add Property, PropertyList and PropertyLoadSaver types.
+  - Deprecate Map. Use a PropertyList instead.
+  ! Remove the Key field from ErrFieldMismatch.
+appengine/memcache:
+  - Add Increment and IncrementExisting functions.
+appengine/runtime:
+  - New package.
+appengine/xmpp:
+  - New package.
+Other:
+  - Support backends.
+
+Version 1.5.5 - October 2011
+============================
+This release changed to api_version 3, based on Go release.r60.2.
+
+appengine/blobstore:
+  ! Add an options parameter to UploadURL for controlling maximum upload size.
+appengine/datastore:
+  ! Add an appengine.Context argument to the NewKey and NewIncompleteKey functions.
+  ! Add an options parameter to RunInTransaction to allow cross-group transactions.
+  ! Add a parent argument to the NewIncompleteKey function.
+  - Allow long slice fields. The total length of all indexed properties may now
+    be up to 5000 elements.
+appengine/log:
+  - New package.
+appengine/urlfetch:
+  - Respect fetch deadline.
+
+Version 1.5.4 - September 2011
+==============================
+appengine/blobstore:
+  - Fix time units in Stat.
+appengine/mail:
+  - Support attachments.
+Other:
+  - Report duplicate package names better in go-app-builder.
+
+Version 1.5.3 - August 2011
+===========================
+appengine:
+  - Add app identity functions: AppID, VersionID, DefaultVersionHostname.
+appengine/datastore:
+  - Fix construction of incomplete keys with parents.
+appengine/delay:
+  - Check argument types at Call time.
+  - Retry delayed functions if they return a non-nil os.Error.
+Other:
+  - Report package dependency cycles in go-app-builder.
+
+Version 1.5.2 - July 2011
+=========================
+This release changed to api_version 2, based on Go release.r58.1.
+
+appengine/datastore:
+  - Add Python-compatible key encoding/decoding.
+  - Add ancestor queries.
+  - Allow GetAll to take a slice of Maps.
+  - Fix handling of incomplete keys with parents during Put and PutMulti.
+  - Make Key work with the gob and json packages.
+appengine/memcache:
+  - Add Delete and DeleteMulti functions.
+
+Version 1.5.1 - June 2011
+=========================
+appengine:
+  ! Replace Context's Logf method with Debugf/Infof/Warningf/Errorf/Criticalf.
+appengine/capability:
+  - New package.
+appengine/datastore:
+  - Add batch operations.
+  - Add transactions.
+appengine/delay:
+  - New package.
+appengine/memcache:
+  - Add GetStats function.
+appengine/taskqueue:
+  - Add "Delay" field to Task.
+  - Give leased tasks a method of "PULL".
+  ! Return the fully-populated equivalent Task from Add.
+appengine/urlfetch:
+  ! Remove error types.
+Other:
+  - Set the RemoteAddr field of http.Request correctly in the dev_appserver.
+
+Version 1.5.0 - May 2011
+========================
+Initial release. Viva il gopher!
+This introduced api_version 1, based on Go release.r57.2.

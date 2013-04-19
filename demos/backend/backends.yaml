@@ -1,0 +1,4 @@
+backends:
+- name: memcache
+  class: B1
+  options: public  # for testing
